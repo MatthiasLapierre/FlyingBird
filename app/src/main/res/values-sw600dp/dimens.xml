@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="ground_height">78dp</dimen>
+    <dimen name="pipe_swing">210dp</dimen>
+    <dimen name="pipe_gap">225dp</dimen>
+    <dimen name="pipe_dist_max">150dp</dimen>
+    <dimen name="pipe_min">52dp</dimen>
+    <dimen name="pipe_width">90dp</dimen>
+    <dimen name="pipe_interval">270dp</dimen>
+    <dimen name="sprite_speed">5dp</dimen>
+    <dimen name="bird_height">37dp</dimen>
+    <dimen name="bird_acceleration">0.975dp</dimen>
+    <dimen name="bird_tap_speed">-10.5dp</dimen>
+    <dimen name="hint_width">480dp</dimen>
+    <dimen name="get_ready_margin_bottom">30dp</dimen>
+    <dimen name="btn_width">150dp</dimen>
+    <dimen name="score_margin">105dp</dimen>
+    <dimen name="score_digit_width">48dp</dimen>
+    <dimen name="score_digit_height">70dp</dimen>
+    <dimen name="score_digit_margin">4dp</dimen>
+    <dimen name="score_small_digit_width">24dp</dimen>
+    <dimen name="score_small_digit_height">34dp</dimen>
+    <dimen name="score_small_digit_margin">3dp</dimen>
+    <dimen name="ground_width">22dp</dimen>
+    <dimen name="ground_margin">60dp</dimen>
+    <dimen name="coin_width">45dp</dimen>
+    <dimen name="coin_speed">5dp</dimen>
+    <dimen name="game_over_width">330dp</dimen>
+    <dimen name="final_score_width">390dp</dimen>
+    <dimen name="final_score_margin_top">8dp</dimen>
+    <dimen name="final_score_margin_bottom">75dp</dimen>
+    <dimen name="new_width">52dp</dimen>
+    <dimen name="cloud_min_height">30dp</dimen>
+    <dimen name="cloud_max_height">120dp</dimen>
+    <dimen name="cloud_min_speed">2dp</dimen>
+    <dimen name="cloud_max_speed">3dp</dimen>
+</resources>

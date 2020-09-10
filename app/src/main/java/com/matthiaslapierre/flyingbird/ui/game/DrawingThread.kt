@@ -31,9 +31,8 @@ class DrawingThread(
         private const val MIN_PIPES = 60
     }
 
-    var currentStatus: Int = Sprite.STATUS_NOT_STARTED
-    var points: Int = 0
-
+    private var currentStatus: Int = Sprite.STATUS_NOT_STARTED
+    private var points: Int = 0
     private var workSprites: MutableList<Sprite> = mutableListOf()
     private var birdSprite: BirdSprite? = null
     private var scoreSprite: ScoreSprite? = null

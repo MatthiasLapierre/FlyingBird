@@ -16,7 +16,7 @@ import com.matthiaslapierre.flyingbird.util.toRect
 class SplashSprite(
     context: Context,
     cache: Cache,
-    var splashInterface: SplashInterface?
+    private var splashInterface: SplashInterface?
 ): Sprite {
 
     private val hintDrawable: Drawable = cache.getDrawable(Cache.BG_SPLASH)

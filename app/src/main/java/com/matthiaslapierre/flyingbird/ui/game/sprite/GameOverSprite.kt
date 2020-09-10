@@ -21,7 +21,7 @@ class GameOverSprite(
     private val score: Int,
     private val newBestScore: Boolean,
     private val bestScore: Int,
-    var splashInterface: SplashSprite.SplashInterface?
+    private var splashInterface: SplashSprite.SplashInterface?
 ) : Sprite {
 
     private val titleDrawable: Drawable = cache.getDrawable(Cache.BG_GAME_OVER)
@@ -45,9 +45,7 @@ class GameOverSprite(
     private val btnWidth: Float = Utils.getDimenInPx(context, R.dimen.btn_width)
     private val btnHeight: Float =
         btnWidth * playDrawable.intrinsicHeight / playDrawable.intrinsicWidth
-    private val digitWidth: Float = Utils.getDimenInPx(context, R.dimen.score_small_digit_width)
     private val digitHeight: Float = Utils.getDimenInPx(context, R.dimen.score_small_digit_height)
-    private val digitMargin: Float = Utils.getDimenInPx(context, R.dimen.score_small_digit_margin)
 
     private var isAlive: Boolean = true
 
