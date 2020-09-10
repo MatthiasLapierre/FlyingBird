@@ -41,7 +41,6 @@ class DrawingThread(
     private var splashSprite: SplashSprite? = null
     private var gameOverSprite: GameOverSprite? = null
     private var lastPipeSprite: PipeSprite? = null
-    private var lastCoinSprite: CoinSprite? = null
     private var countPipes: Int = 0
     private val pipeWidth = Utils.getDimenInPx(context, R.dimen.pipe_width)
     private val coinWidth = Utils.getDimenInPx(context, R.dimen.coin_width)
@@ -148,6 +147,7 @@ class DrawingThread(
                     if(lastPipeSprite != null) {
                         nextPipeX = lastPipeSprite!!.x + pipeInterval
                     }
+                    val cloudSprites = mutableListOf<CloudSprite>()
                     while(countPipes < MIN_PIPES) {
                         lastPipeSprite = PipeSprite(
                             context,
@@ -155,16 +155,24 @@ class DrawingThread(
                             nextPipeX,
                             lastPipeSprite?.lastBlockY
                         )
-                        lastCoinSprite = CoinSprite(
+                        val lastCoinSprite = CoinSprite(
                             context,
                             cache,
                             nextPipeX + pipeWidth + pipeInterval / 2f - coinWidth / 2f
                         )
+                        val cloudSprite = CloudSprite(
+                            context,
+                            cache,
+                            nextPipeX
+                        )
+                        cloudSprites.add(cloudSprite)
                         workSprites.add(0, lastPipeSprite!!)
-                        workSprites.add(0, lastCoinSprite!!)
+                        workSprites.add(0, lastCoinSprite)
+
                         nextPipeX += pipeWidth + pipeInterval
                         countPipes++
                     }
+                    workSprites.addAll(0, cloudSprites)
 
 
                     /*
@@ -265,7 +273,6 @@ class DrawingThread(
         birdSprite = null
         splashSprite = null
         gameOverSprite = null
-        lastCoinSprite = null
         lastPipeSprite = null
         countPipes = 0
         points = 0

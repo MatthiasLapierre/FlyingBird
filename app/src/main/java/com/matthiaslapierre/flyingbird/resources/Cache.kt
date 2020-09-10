@@ -3,7 +3,6 @@ package com.matthiaslapierre.flyingbird.resources
 import android.content.Context
 import android.graphics.drawable.Drawable
 import com.matthiaslapierre.flyingbird.R
-import com.matthiaslapierre.flyingbird.ui.game.sprite.BirdSprite
 import com.matthiaslapierre.flyingbird.util.Utils
 
 /**
@@ -31,16 +30,18 @@ class Cache  {
         const val IMG_8 = 16
         const val IMG_9 = 17
         const val IMG_GOLD_MEDAL = 18
-        const val BG_GROUND_UP = 19
-        const val BG_GROUND_DOWN = 20
-        const val BG_DAY = 21
-        const val BG_NIGHT = 22
-        const val BG_SPLASH = 23
-        const val BG_GAME_OVER = 24
-        const val BG_FINAL_SCORE = 25
+        const val IMG_CLOUD_0 = 19
+        const val IMG_CLOUD_1 = 20
+        const val BG_GROUND_UP = 21
+        const val BG_GROUND_DOWN = 22
+        const val BG_DAY = 23
+        const val BG_NIGHT = 24
+        const val BG_SPLASH = 25
+        const val BG_GAME_OVER = 26
+        const val BG_FINAL_SCORE = 27
     }
 
-    private val drawables: Array<Drawable?> = arrayOfNulls(26)
+    private val drawables: Array<Drawable?> = arrayOfNulls(28)
 
     fun load(context: Context) {
         val drawableResIds = intArrayOf(
@@ -63,6 +64,8 @@ class Cache  {
             R.drawable.img_8,
             R.drawable.img_9,
             R.drawable.img_gold_medal,
+            R.drawable.img_cloud_0,
+            R.drawable.img_cloud_1,
             R.drawable.bg_ground_up,
             R.drawable.bg_ground_down,
             R.drawable.bg_general_day,
@@ -89,5 +92,7 @@ class Cache  {
         IMG_BIRD_2,
         IMG_BIRD_3
     ).map { getDrawable(it) }.toTypedArray()
+
+    fun getRandomCloud(): Drawable = getDrawable(IMG_CLOUD_0 + Utils.getRandomInt(2))
 
 }

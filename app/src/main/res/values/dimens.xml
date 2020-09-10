@@ -39,4 +39,8 @@
     <dimen name="final_score_margin_top">5dp</dimen>
     <dimen name="final_score_margin_bottom">50dp</dimen>
     <dimen name="new_width">35dp</dimen>
+    <dimen name="cloud_min_height">20dp</dimen>
+    <dimen name="cloud_max_height">80dp</dimen>
+    <dimen name="cloud_min_speed">1dp</dimen>
+    <dimen name="cloud_max_speed">2dp</dimen>
 </resources>
