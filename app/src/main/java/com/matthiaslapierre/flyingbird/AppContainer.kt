@@ -1,6 +1,7 @@
 package com.matthiaslapierre.flyingbird
 
 import com.matthiaslapierre.flyingbird.resources.Cache
+import com.matthiaslapierre.flyingbird.resources.Scores
 import com.matthiaslapierre.flyingbird.resources.SoundEngine
 
 /**
@@ -13,4 +14,5 @@ import com.matthiaslapierre.flyingbird.resources.SoundEngine
 class AppContainer {
     val cache = Cache()
     val soundEngine = SoundEngine()
+    val scores = Scores()
 }

@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.matthiaslapierre.flyingbird.App
 import com.matthiaslapierre.flyingbird.R
 import com.matthiaslapierre.flyingbird.resources.Cache
+import com.matthiaslapierre.flyingbird.resources.Scores
 import com.matthiaslapierre.flyingbird.ui.game.DrawingThread
 import com.matthiaslapierre.flyingbird.resources.SoundEngine
 import kotlinx.android.synthetic.main.activity_game.*
@@ -27,6 +28,7 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
 
     private lateinit var cache: Cache
     private lateinit var soundEngine: SoundEngine
+    private lateinit var scores: Scores
 
     private lateinit var holder: SurfaceHolder
     private val globalPaint: Paint by lazy {
@@ -44,6 +46,7 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
         val appContainer = (application as App).appContainer
         cache = appContainer.cache
         soundEngine = appContainer.soundEngine
+        scores = appContainer.scores
 
         surfaceView.keepScreenOn = true
         holder = surfaceView.holder
@@ -55,7 +58,7 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
 
     override fun onTouch(view: View?, event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_DOWN) {
-            drawingThread?.onTap()
+            drawingThread?.onTap(event.x, event.y)
         }
         return false
     }
@@ -85,6 +88,7 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
             holder,
             globalPaint,
             cache,
+            scores,
             this@GameActivity
         )
         drawingThread!!.start()

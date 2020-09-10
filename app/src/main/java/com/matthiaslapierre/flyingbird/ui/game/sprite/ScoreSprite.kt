@@ -4,38 +4,42 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import com.matthiaslapierre.flyingbird.R
+import com.matthiaslapierre.flyingbird.resources.Cache
 import com.matthiaslapierre.flyingbird.util.Utils
+import com.matthiaslapierre.flyingbird.util.toDigits
 
 /**
  * Display the score.
  */
 class ScoreSprite(
-    context: Context
+    context: Context,
+    private val cache: Cache
 ) : Sprite {
-
-    companion object {
-        private const val TEXT_COLOR: Int = 0xFFFFFFFF.toInt()
-        private const val SHADOW_COLOR: Int = 0x50000000
-        private const val SHADOW_RADIUS = 2f
-        private const val SHADOW_DELTA = 2f
-    }
 
     var currentScore: Int = 0
     private val marginTop: Float = Utils.getDimenInPx(context, R.dimen.score_margin)
-    private val textPaint: Paint by lazy {
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        paint.textAlign = Paint.Align.CENTER
-        paint.textSize = Utils.getDimenInPx(context, R.dimen.score_size)
-        paint.color = TEXT_COLOR
-        paint.setShadowLayer(SHADOW_RADIUS, SHADOW_DELTA, SHADOW_DELTA, SHADOW_COLOR)
-        paint
-    }
+    private val digitWidth: Float = Utils.getDimenInPx(context, R.dimen.score_digit_width)
+    private val digitHeight: Float = Utils.getDimenInPx(context, R.dimen.score_digit_height)
+    private val digitMargin: Float = Utils.getDimenInPx(context, R.dimen.score_digit_margin)
 
     override fun onDraw(canvas: Canvas, globalPaint: Paint, status: Int) {
         if (status == Sprite.STATUS_NOT_STARTED) {
             return
         }
-        canvas.drawText(currentScore.toString(), canvas.width / 2f, marginTop, textPaint)
+        val digits = currentScore.toDigits()
+        val scoreWidth = (digits.size * digitWidth) + (digitMargin * (digits.size - 1))
+        val x = canvas.width / 2f - scoreWidth / 2f
+        val y = marginTop
+        Utils.drawScore(
+            currentScore,
+            cache,
+            canvas,
+            x,
+            y,
+            digitWidth,
+            digitHeight,
+            digitMargin
+        )
     }
 
     override fun isAlive(): Boolean = true

@@ -18,15 +18,29 @@ class Cache  {
         const val IMG_PIPE_UP = 3
         const val IMG_PIPE_DOWN = 4
         const val IMG_COIN = 5
-        const val BG_GROUND_UP = 6
-        const val BG_GROUND_DOWN = 7
-        const val BG_DAY = 8
-        const val BG_NIGHT = 9
-        const val BG_SPLASH = 10
-        const val BG_GAME_OVER = 11
+        const val IMG_PLAY_BTN = 6
+        const val IMG_NEW = 7
+        const val IMG_0 = 8
+        const val IMG_1 = 9
+        const val IMG_2 = 10
+        const val IMG_3 = 11
+        const val IMG_4 = 12
+        const val IMG_5 = 13
+        const val IMG_6 = 14
+        const val IMG_7 = 15
+        const val IMG_8 = 16
+        const val IMG_9 = 17
+        const val IMG_GOLD_MEDAL = 18
+        const val BG_GROUND_UP = 19
+        const val BG_GROUND_DOWN = 20
+        const val BG_DAY = 21
+        const val BG_NIGHT = 22
+        const val BG_SPLASH = 23
+        const val BG_GAME_OVER = 24
+        const val BG_FINAL_SCORE = 25
     }
 
-    private val drawables: Array<Drawable?> = arrayOfNulls(12)
+    private val drawables: Array<Drawable?> = arrayOfNulls(26)
 
     fun load(context: Context) {
         val drawableResIds = intArrayOf(
@@ -36,12 +50,26 @@ class Cache  {
             R.drawable.img_pipe_up,
             R.drawable.img_pipe_down,
             R.drawable.img_coin,
+            R.drawable.img_play_btn,
+            R.drawable.img_new,
+            R.drawable.img_0,
+            R.drawable.img_1,
+            R.drawable.img_2,
+            R.drawable.img_3,
+            R.drawable.img_4,
+            R.drawable.img_5,
+            R.drawable.img_6,
+            R.drawable.img_7,
+            R.drawable.img_8,
+            R.drawable.img_9,
+            R.drawable.img_gold_medal,
             R.drawable.bg_ground_up,
             R.drawable.bg_ground_down,
             R.drawable.bg_general_day,
             R.drawable.bg_general_night,
             R.drawable.bg_splash,
-            R.drawable.bg_game_over
+            R.drawable.bg_game_over,
+            R.drawable.bg_final_score
         )
         drawableResIds.forEachIndexed{ index, resId ->
             drawables[index] =
@@ -53,6 +81,8 @@ class Cache  {
     }
 
     fun getDrawable(index: Int): Drawable = drawables[index]!!
+
+    fun getDigit(digit: Int): Drawable = getDrawable(IMG_0 + digit)
 
     fun getBirdDrawable(): Array<Drawable> = arrayOf(
         IMG_BIRD_1,

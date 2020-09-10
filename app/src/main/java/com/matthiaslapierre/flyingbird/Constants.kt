@@ -14,6 +14,11 @@ object Constants {
      */
     const val SOUND_MAX_STREAMS = 5
 
+    /**
+     * Minimum points to win the gold medal.
+     */
+    const val GOLDEN_SCORE = 50
+
     const val UNDEFINED = -999f
 
 }

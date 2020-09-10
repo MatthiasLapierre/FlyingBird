@@ -8,6 +8,7 @@ import android.view.SurfaceHolder
 import com.matthiaslapierre.flyingbird.Constants
 import com.matthiaslapierre.flyingbird.R
 import com.matthiaslapierre.flyingbird.resources.Cache
+import com.matthiaslapierre.flyingbird.resources.Scores
 import com.matthiaslapierre.flyingbird.ui.game.sprite.*
 import com.matthiaslapierre.flyingbird.util.Utils
 
@@ -22,15 +23,16 @@ class DrawingThread(
     private val holder: SurfaceHolder,
     private val globalPaint: Paint,
     private val cache: Cache,
+    private val scores: Scores,
     private var gameInterface: GameInterface?
-): Thread() {
+): Thread(), SplashSprite.SplashInterface, GameOverSprite.GameOverInterface {
 
     companion object {
         private const val MIN_PIPES = 60
     }
 
     var currentStatus: Int = Sprite.STATUS_NOT_STARTED
-    var point: Int = 0
+    var points: Int = 0
 
     private var workSprites: MutableList<Sprite> = mutableListOf()
     private var birdSprite: BirdSprite? = null
@@ -44,6 +46,7 @@ class DrawingThread(
     private val pipeWidth = Utils.getDimenInPx(context, R.dimen.pipe_width)
     private val coinWidth = Utils.getDimenInPx(context, R.dimen.coin_width)
     private val pipeInterval = Utils.getDimenInPx(context, R.dimen.pipe_interval)
+    private var newBestScore: Boolean = false
 
     override fun run() {
         super.run()
@@ -77,7 +80,7 @@ class DrawingThread(
                         sprite.onDraw(canvas, globalPaint, currentStatus)
                     } else {
                         if(sprite is PipeSprite) {
-                            scoreSprite?.currentScore = ++point
+                            scoreSprite?.currentScore = ++points
                             countPipes--
                         }
                         iterator.remove()
@@ -106,14 +109,21 @@ class DrawingThread(
                 Sprite.STATUS_NOT_STARTED -> {
                     // Show the home screen
                     if(splashSprite == null || !splashSprite!!.isAlive()) {
-                        splashSprite = SplashSprite(context, cache)
+                        splashSprite = SplashSprite(context, cache, this@DrawingThread)
                         workSprites.add(splashSprite!!)
                     }
                 }
                 Sprite.STATUS_GAME_OVER -> {
                     // Show the Game Over screen.
                     if(gameOverSprite == null || !gameOverSprite!!.isAlive()) {
-                        gameOverSprite = GameOverSprite(context, cache)
+                        gameOverSprite = GameOverSprite(
+                            context,
+                            cache,
+                            points,
+                            newBestScore,
+                            scores.highScore(context),
+                            this@DrawingThread
+                        )
                         workSprites.add(gameOverSprite!!)
                     }
                 }
@@ -121,7 +131,7 @@ class DrawingThread(
                     // Show the game.
                     // Draw the score, the ground, the bird...
                     if(scoreSprite == null || !scoreSprite!!.isAlive()) {
-                        scoreSprite = ScoreSprite(context)
+                        scoreSprite = ScoreSprite(context, cache)
                         workSprites.add(scoreSprite!!)
                     }
                     if(groundSprite == null || !groundSprite!!.isAlive()) {
@@ -169,6 +179,10 @@ class DrawingThread(
                             when(sprite) {
                                 is PipeSprite, is GroundSprite -> {
                                     gameInterface?.onHit()
+                                    newBestScore = scores.isNewBestScore(context, points)
+                                    if(newBestScore) {
+                                        scores.storeHighScore(context, points)
+                                    }
                                     /*
                                     the game is over and we will have to display the end screen to
                                     the player the next time the Game Loop passes.
@@ -177,8 +191,8 @@ class DrawingThread(
                                     gameInterface?.onGameOver()
                                 }
                                 is CoinSprite -> {
-                                    point += sprite.getScore()
-                                    scoreSprite?.currentScore = point
+                                    points += sprite.getScore()
+                                    scoreSprite?.currentScore = points
                                     gameInterface?.onGetPoint()
                                 }
                             }
@@ -189,21 +203,28 @@ class DrawingThread(
         }
     }
 
+    override fun onPlayBtnTapped() {
+        startGame()
+    }
+
+    override fun onReplayBtnTapped() {
+        startGame()
+    }
+
     /**
      * The goal of Flappy Bird is to allow the player to progress the bird by tapping on the screen,
      * so we must act within the onTouch method of the OnTouchListener interface that our main
      * activity inherits. It is in this method that we will interact with the player when they type
      * on the screen.
      */
-    fun onTap() {
+    fun onTap(x: Float, y: Float) {
         when(currentStatus) {
             Sprite.STATUS_NOT_STARTED -> {
                 /*
                 If the game has not yet started, a first tap on the screen will allow you to
                 change its status to the STATUS_PLAY constant. Have a good game!
                  */
-                currentStatus = Sprite.STATUS_PLAY
-                startGame()
+                splashSprite?.onTap(x, y)
             }
             Sprite.STATUS_PLAY -> {
                 /*
@@ -222,8 +243,7 @@ class DrawingThread(
                 screen the player to touch in order to react accordingly either to start a new game
                 or to share the successful score via social networks for example.
                  */
-                currentStatus = Sprite.STATUS_NOT_STARTED
-                resetGame()
+                gameOverSprite?.onTap(x, y)
             }
         }
     }
@@ -248,11 +268,12 @@ class DrawingThread(
         lastCoinSprite = null
         lastPipeSprite = null
         countPipes = 0
-        point = 0
+        points = 0
     }
 
     private fun startGame() {
         resetGame()
+        currentStatus = Sprite.STATUS_PLAY
         gameInterface?.onGameStart()
     }
 

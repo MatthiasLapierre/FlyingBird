@@ -29,16 +29,27 @@ class GroundSprite(
     private val groupUpHeight: Float = groundHeight - Utils.getDimenInPx(context, R.dimen.ground_margin)
 
     override fun onDraw(canvas: Canvas, globalPaint: Paint, status: Int) {
+        val screenWidth = canvas.width.toFloat()
+        val screenHeight = canvas.height.toFloat()
+
         if (status == Sprite.STATUS_PLAY || status == Sprite.STATUS_NOT_STARTED) {
             layerX -= speed
         }
         if (layerX < -groundWidth) {
             layerX = 0f
         }
+        layerY = screenHeight - groundHeight
+
+        groundDown.bounds = RectF(
+            0f,
+            layerY,
+            screenWidth,
+            screenHeight
+        ).toRect()
         groundDown.draw(canvas)
-        layerY = canvas.height - groundHeight
-        val screenWidth = canvas.width
-        for (x in layerX.toInt() until screenWidth step groundWidth.toInt()) {
+
+
+        for (x in layerX.toInt() until screenWidth.toInt() step groundWidth.toInt()) {
             groundUp.bounds = RectF(
                 x.toFloat(),
                 layerY,
