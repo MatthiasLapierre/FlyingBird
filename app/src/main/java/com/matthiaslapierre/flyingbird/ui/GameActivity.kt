@@ -1,4 +1,4 @@
-package com.matthiaslapierre.flyingbird
+package com.matthiaslapierre.flyingbird.ui
 
 import android.graphics.Paint
 import android.graphics.PixelFormat
@@ -8,8 +8,11 @@ import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.matthiaslapierre.flyingbird.game.DrawingThread
-import com.matthiaslapierre.flyingbird.util.SoundEngine
+import com.matthiaslapierre.flyingbird.App
+import com.matthiaslapierre.flyingbird.R
+import com.matthiaslapierre.flyingbird.resources.Cache
+import com.matthiaslapierre.flyingbird.ui.game.DrawingThread
+import com.matthiaslapierre.flyingbird.resources.SoundEngine
 import kotlinx.android.synthetic.main.activity_game.*
 
 /**
@@ -22,6 +25,7 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
         private const val TAG = "GameActivity"
     }
 
+    private lateinit var cache: Cache
     private lateinit var soundEngine: SoundEngine
 
     private lateinit var holder: SurfaceHolder
@@ -38,7 +42,8 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
 
         // Inject dependencies.
         val appContainer = (application as App).appContainer
-        soundEngine = appContainer.soundPoolHelper
+        cache = appContainer.cache
+        soundEngine = appContainer.soundEngine
 
         surfaceView.keepScreenOn = true
         holder = surfaceView.holder
@@ -79,6 +84,7 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
             applicationContext,
             holder,
             globalPaint,
+            cache,
             this@GameActivity
         )
         drawingThread!!.start()

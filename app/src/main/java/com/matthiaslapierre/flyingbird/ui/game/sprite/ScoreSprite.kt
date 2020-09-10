@@ -1,4 +1,4 @@
-package com.matthiaslapierre.flyingbird.game.sprite
+package com.matthiaslapierre.flyingbird.ui.game.sprite
 
 import android.content.Context
 import android.graphics.Canvas
@@ -6,6 +6,9 @@ import android.graphics.Paint
 import com.matthiaslapierre.flyingbird.R
 import com.matthiaslapierre.flyingbird.util.Utils
 
+/**
+ * Display the score.
+ */
 class ScoreSprite(
     context: Context
 ) : Sprite {

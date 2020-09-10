@@ -1,27 +1,28 @@
-package com.matthiaslapierre.flyingbird.game.sprite
+package com.matthiaslapierre.flyingbird.ui.game.sprite
 
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
-import android.util.Log
+import com.matthiaslapierre.flyingbird.Constants.UNDEFINED
 import com.matthiaslapierre.flyingbird.R
+import com.matthiaslapierre.flyingbird.resources.Cache
 import com.matthiaslapierre.flyingbird.util.Utils
 import com.matthiaslapierre.flyingbird.util.toRect
 import kotlin.math.max
 import kotlin.math.min
 
+/**
+ * Manages the pipes displayed on the screen that must be avoided by the player.
+ */
 class PipeSprite(
     context: Context,
+    cache: Cache,
     var x: Float,
     val lastBlockY: Float?
 ): Sprite {
 
-    companion object {
-        private const val UNDEFINED: Float = -999.0f
-    }
-
-    private val drawablePipeUp: Drawable = Utils.getDrawable(context, R.drawable.img_pipe_up)
-    private val drawablePipeDown: Drawable = Utils.getDrawable(context, R.drawable.img_pipe_down)
+    private val drawablePipeUp: Drawable = cache.getDrawable(Cache.IMG_PIPE_UP)
+    private val drawablePipeDown: Drawable = cache.getDrawable(Cache.IMG_PIPE_DOWN)
     private val speed: Float = Utils.getDimenInPx(context, R.dimen.sprite_speed)
     private val pipeWidth: Float = Utils.getDimenInPx(context, R.dimen.pipe_width)
     private val gap: Float = Utils.getDimenInPx(context, R.dimen.pipe_gap)

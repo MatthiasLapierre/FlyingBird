@@ -14,4 +14,6 @@ object Constants {
      */
     const val SOUND_MAX_STREAMS = 5
 
+    const val UNDEFINED = -999f
+
 }

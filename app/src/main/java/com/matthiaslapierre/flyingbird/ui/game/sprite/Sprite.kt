@@ -1,4 +1,4 @@
-package com.matthiaslapierre.flyingbird.game.sprite
+package com.matthiaslapierre.flyingbird.ui.game.sprite
 
 import android.graphics.Canvas
 import android.graphics.Paint

@@ -1,4 +1,4 @@
-package com.matthiaslapierre.flyingbird.util
+package com.matthiaslapierre.flyingbird.resources
 
 import android.content.Context
 import android.media.AudioAttributes

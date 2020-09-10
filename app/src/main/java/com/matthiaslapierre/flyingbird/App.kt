@@ -9,7 +9,7 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
         // Load resources once.
-        appContainer.drawableHelper.load(applicationContext)
-        appContainer.soundPoolHelper.load(applicationContext)
+        appContainer.cache.load(applicationContext)
+        appContainer.soundEngine.load(applicationContext)
     }
 }

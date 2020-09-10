@@ -1,4 +1,4 @@
-package com.matthiaslapierre.flyingbird.game.sprite
+package com.matthiaslapierre.flyingbird.ui.game.sprite
 
 import android.content.Context
 import android.graphics.Canvas
@@ -6,20 +6,22 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
+import com.matthiaslapierre.flyingbird.Constants.UNDEFINED
 import com.matthiaslapierre.flyingbird.R
+import com.matthiaslapierre.flyingbird.resources.Cache
 import com.matthiaslapierre.flyingbird.util.Utils
 import com.matthiaslapierre.flyingbird.util.toRect
 
+/**
+ * Display the pieces to be collected.
+ */
 class CoinSprite(
     context: Context,
+    cache: Cache,
     private var x: Float
 ): Sprite {
 
-    companion object {
-        private const val UNDEFINED: Float = -999.0f
-    }
-
-    private val drawable: Drawable = Utils.getDrawable(context, R.drawable.img_coin)
+    private val drawable: Drawable = cache.getDrawable(Cache.IMG_COIN)
     private val coinWidth: Float = Utils.getDimenInPx(context, R.dimen.coin_width)
     private val coinHeight: Float = Utils.getDimenInPx(context, R.dimen.coin_width)
     private var y: Float = UNDEFINED
@@ -43,6 +45,7 @@ class CoinSprite(
         }
         if(status == Sprite.STATUS_PLAY) {
             x -= speed
+            // Animate the coin
             alpha -= alphaSpeed
             if(alpha < minAlpha) {
                 alpha = minAlpha

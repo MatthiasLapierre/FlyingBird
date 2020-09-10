@@ -1,4 +1,4 @@
-package com.matthiaslapierre.flyingbird.game
+package com.matthiaslapierre.flyingbird.ui.game
 
 import android.content.Context
 import android.graphics.Canvas
@@ -7,7 +7,8 @@ import android.graphics.PorterDuff
 import android.view.SurfaceHolder
 import com.matthiaslapierre.flyingbird.Constants
 import com.matthiaslapierre.flyingbird.R
-import com.matthiaslapierre.flyingbird.game.sprite.*
+import com.matthiaslapierre.flyingbird.resources.Cache
+import com.matthiaslapierre.flyingbird.ui.game.sprite.*
 import com.matthiaslapierre.flyingbird.util.Utils
 
 /**
@@ -20,6 +21,7 @@ class DrawingThread(
     private val context: Context,
     private val holder: SurfaceHolder,
     private val globalPaint: Paint,
+    private val cache: Cache,
     private var gameInterface: GameInterface?
 ): Thread() {
 
@@ -104,14 +106,14 @@ class DrawingThread(
                 Sprite.STATUS_NOT_STARTED -> {
                     // Show the home screen
                     if(splashSprite == null || !splashSprite!!.isAlive()) {
-                        splashSprite = SplashSprite(context)
+                        splashSprite = SplashSprite(context, cache)
                         workSprites.add(splashSprite!!)
                     }
                 }
                 Sprite.STATUS_GAME_OVER -> {
                     // Show the Game Over screen.
                     if(gameOverSprite == null || !gameOverSprite!!.isAlive()) {
-                        gameOverSprite = GameOverSprite(context)
+                        gameOverSprite = GameOverSprite(context, cache)
                         workSprites.add(gameOverSprite!!)
                     }
                 }
@@ -123,11 +125,11 @@ class DrawingThread(
                         workSprites.add(scoreSprite!!)
                     }
                     if(groundSprite == null || !groundSprite!!.isAlive()) {
-                        groundSprite = GroundSprite(context)
+                        groundSprite = GroundSprite(context, cache)
                         workSprites.add(groundSprite!!)
                     }
                     if(birdSprite == null || !birdSprite!!.isAlive()) {
-                        birdSprite = BirdSprite(context)
+                        birdSprite = BirdSprite(context, cache)
                         workSprites.add(birdSprite!!)
                     }
 
@@ -137,8 +139,17 @@ class DrawingThread(
                         nextPipeX = lastPipeSprite!!.x + pipeInterval
                     }
                     while(countPipes < MIN_PIPES) {
-                        lastPipeSprite = PipeSprite(context, nextPipeX, lastPipeSprite?.lastBlockY)
-                        lastCoinSprite = CoinSprite(context, nextPipeX + pipeWidth + pipeInterval / 2f - coinWidth / 2f)
+                        lastPipeSprite = PipeSprite(
+                            context,
+                            cache,
+                            nextPipeX,
+                            lastPipeSprite?.lastBlockY
+                        )
+                        lastCoinSprite = CoinSprite(
+                            context,
+                            cache,
+                            nextPipeX + pipeWidth + pipeInterval / 2f - coinWidth / 2f
+                        )
                         workSprites.add(0, lastPipeSprite!!)
                         workSprites.add(0, lastCoinSprite!!)
                         nextPipeX += pipeWidth + pipeInterval
