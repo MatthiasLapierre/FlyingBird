@@ -3,26 +3,26 @@ package com.matthiaslapierre.flyingbird.ui.game.sprite
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import com.matthiaslapierre.flyingbird.Constants
 import com.matthiaslapierre.flyingbird.R
 import com.matthiaslapierre.flyingbird.resources.Cache
 import com.matthiaslapierre.flyingbird.util.Utils
-import com.matthiaslapierre.flyingbird.util.toDigits
 import com.matthiaslapierre.flyingbird.util.toRect
 
 /**
  * Game Over screen.
  */
 class GameOverSprite(
-    context: Context,
+    private val context: Context,
     private val cache: Cache,
     private val score: Int,
     private val newBestScore: Boolean,
     private val bestScore: Int,
     var splashInterface: SplashSprite.SplashInterface?
-): Sprite {
+) : Sprite {
 
     private val titleDrawable: Drawable = cache.getDrawable(Cache.BG_GAME_OVER)
     private val bgFinalScoreDrawable: Drawable = cache.getDrawable(Cache.BG_FINAL_SCORE)
@@ -30,15 +30,21 @@ class GameOverSprite(
     private val playDrawable: Drawable = cache.getDrawable(Cache.IMG_PLAY_BTN)
     private val goldMedalDrawable: Drawable = cache.getDrawable(Cache.IMG_GOLD_MEDAL)
     private val titleWidth: Float = Utils.getDimenInPx(context, R.dimen.game_over_width)
-    private val titleHeight: Float = titleDrawable.intrinsicHeight * titleWidth / titleDrawable.intrinsicWidth
-    private val bgFinalScoreMarginTop: Float = Utils.getDimenInPx(context, R.dimen.final_score_margin_top)
-    private val bgFinalScoreMarginBottom: Float = Utils.getDimenInPx(context, R.dimen.final_score_margin_bottom)
+    private val titleHeight: Float =
+        titleDrawable.intrinsicHeight * titleWidth / titleDrawable.intrinsicWidth
+    private val bgFinalScoreMarginTop: Float =
+        Utils.getDimenInPx(context, R.dimen.final_score_margin_top)
+    private val bgFinalScoreMarginBottom: Float =
+        Utils.getDimenInPx(context, R.dimen.final_score_margin_bottom)
     private val bgFinalScoreWidth: Float = Utils.getDimenInPx(context, R.dimen.final_score_width)
-    private val bgFinalScoreHeight: Float = bgFinalScoreDrawable.intrinsicHeight * bgFinalScoreWidth / bgFinalScoreDrawable.intrinsicWidth
+    private val bgFinalScoreHeight: Float =
+        bgFinalScoreDrawable.intrinsicHeight * bgFinalScoreWidth / bgFinalScoreDrawable.intrinsicWidth
     private val newWidth: Float = Utils.getDimenInPx(context, R.dimen.new_width)
-    private val newHeight: Float = newDrawable.intrinsicHeight * newWidth / newDrawable.intrinsicWidth
+    private val newHeight: Float =
+        newDrawable.intrinsicHeight * newWidth / newDrawable.intrinsicWidth
     private val btnWidth: Float = Utils.getDimenInPx(context, R.dimen.btn_width)
-    private val btnHeight: Float = btnWidth * playDrawable.intrinsicHeight / playDrawable.intrinsicWidth
+    private val btnHeight: Float =
+        btnWidth * playDrawable.intrinsicHeight / playDrawable.intrinsicWidth
     private val digitWidth: Float = Utils.getDimenInPx(context, R.dimen.score_small_digit_width)
     private val digitHeight: Float = Utils.getDimenInPx(context, R.dimen.score_small_digit_height)
     private val digitMargin: Float = Utils.getDimenInPx(context, R.dimen.score_small_digit_margin)
@@ -52,7 +58,8 @@ class GameOverSprite(
         val screenHeight = canvas.height
 
         // "Game Over" title
-        var y = (screenHeight / 2f) - (titleHeight / 2f) - (bgFinalScoreHeight / 2f) - (bgFinalScoreMarginTop / 2f) - (bgFinalScoreMarginBottom / 2f)
+        var y =
+            (screenHeight / 2f) - (titleHeight / 2f) - (bgFinalScoreHeight / 2f) - (bgFinalScoreMarginTop / 2f) - (bgFinalScoreMarginBottom / 2f)
         titleDrawable.bounds = RectF(
             screenWidth / 2f - titleWidth / 2f,
             y - titleHeight / 2f,
@@ -72,33 +79,45 @@ class GameOverSprite(
         bgFinalScoreDrawable.draw(canvas)
 
         // Last score
-        val scoreDigits = score.toDigits()
-        Utils.drawScore(
-            score,
-            cache,
-            canvas,
-            (screenWidth / 2f) + (bgFinalScoreWidth / 2f) - (digitWidth * scoreDigits.size) - (digitMargin * (scoreDigits.size - 1)) - (bgFinalScoreWidth * .095f),
-            y + bgFinalScoreHeight * .28f,
-            digitWidth,
-            digitHeight,
-            digitMargin
+        val scoreDeltaX =
+            (screenWidth / 2f) + (bgFinalScoreWidth / 2f) - (bgFinalScoreWidth * .095f)
+        val scoreBmp = Utils.generateScore(context, score, cache)
+        val scoreRatio = digitHeight / scoreBmp.height
+        val scoreX = scoreDeltaX - (scoreBmp.width * scoreRatio)
+        val scoreY = y + bgFinalScoreHeight * .28f
+        canvas.drawBitmap(
+            scoreBmp,
+            Rect(0, 0, scoreBmp.width, scoreBmp.height),
+            RectF(
+                scoreX,
+                scoreY,
+                scoreX + scoreBmp.width * scoreRatio,
+                scoreY + scoreBmp.height * scoreRatio
+            ),
+            null
         )
+        scoreBmp.recycle()
 
         // Best score
-        val bestScoreDigits = bestScore.toDigits()
-        Utils.drawScore(
-            bestScore,
-            cache,
-            canvas,
-            (screenWidth / 2f) + (bgFinalScoreWidth / 2f) - (digitWidth * bestScoreDigits.size) - (digitMargin * (bestScoreDigits.size - 1)) - (bgFinalScoreWidth * .095f),
-            y + bgFinalScoreHeight * .65f,
-            digitWidth,
-            digitHeight,
-            digitMargin
+        val bestScoreBmp = Utils.generateScore(context, bestScore, cache)
+        val bestScoreRatio = digitHeight / bestScoreBmp.height
+        val bestScoreX = scoreDeltaX - (bestScoreBmp.width * bestScoreRatio)
+        val bestScoreY = y + bgFinalScoreHeight * .65f
+        canvas.drawBitmap(
+            bestScoreBmp,
+            Rect(0, 0, bestScoreBmp.width, bestScoreBmp.height),
+            RectF(
+                bestScoreX,
+                bestScoreY,
+                bestScoreX + bestScoreBmp.width * bestScoreRatio,
+                bestScoreY + bestScoreBmp.height * bestScoreRatio
+            ),
+            null
         )
+        bestScoreBmp.recycle()
 
         // Next best score icon
-        if(newBestScore) {
+        if (newBestScore) {
             val xNewBestScore =
                 (screenWidth / 2f) + (bgFinalScoreWidth / 2f) - (bgFinalScoreWidth * .4f)
             val yNewBestScore = y + bgFinalScoreHeight * .51f
@@ -111,7 +130,7 @@ class GameOverSprite(
             newDrawable.draw(canvas)
         }
 
-        if(score > Constants.GOLDEN_SCORE) {
+        if (score > Constants.GOLDEN_SCORE) {
             val xGoldMedal =
                 (screenWidth / 2f) - (bgFinalScoreWidth / 2f) + (bgFinalScoreWidth * .11f)
             val yGoldMedal = y + bgFinalScoreHeight * .37f
@@ -143,7 +162,7 @@ class GameOverSprite(
     override fun getScore(): Int = 0
 
     fun onTap(x: Float, y: Float) {
-        if(playDrawable.bounds.contains(x.toInt(), y.toInt())) {
+        if (playDrawable.bounds.contains(x.toInt(), y.toInt())) {
             splashInterface?.onPlayBtnTapped()
         }
     }

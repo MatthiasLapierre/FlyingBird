@@ -1,7 +1,7 @@
 package com.matthiaslapierre.flyingbird.util
 
 import android.content.Context
-import android.graphics.Canvas
+import android.graphics.Bitmap
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
@@ -10,6 +10,9 @@ import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import com.matthiaslapierre.flyingbird.resources.Cache
 import kotlin.random.Random
+
+import android.graphics.Canvas
+import com.matthiaslapierre.flyingbird.R
 
 
 /**
@@ -25,24 +28,26 @@ object Utils {
 
     fun getRandomInt(maxValue: Int): Int = Random.nextInt(0, maxValue)
 
-    fun drawScore(
+    fun generateScore(
+        context: Context,
         points: Int,
-        cache: Cache,
-        canvas: Canvas,
-        x: Float,
-        y: Float,
-        digitWidth: Float,
-        digitHeight: Float,
-        digitMargin: Float
-    ) {
+        cache: Cache
+    ): Bitmap {
         val digits = points.toDigits()
-        var currentX = x
+        var currentX = 0f
+        val digitWidth = getDimenInPx(context, R.dimen.score_digit_width)
+        val height = getDimenInPx(context, R.dimen.score_digit_height)
+        val digitMargin = getDimenInPx(context, R.dimen.score_digit_margin)
+        val width = (digits.size * digitWidth) + (digitMargin * (digits.size - 1))
+        val bitmap = Bitmap.createBitmap(width.toInt(), height.toInt(), Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
         digits.reversedArray().forEach { digit ->
             val drawable = cache.getDigit(digit)
-            drawable.bounds = RectF(currentX, y, currentX + digitWidth, y + digitHeight).toRect()
+            drawable.bounds = RectF(currentX, 0f, currentX + digitWidth, height).toRect()
             drawable.draw(canvas)
             currentX += digitWidth + digitMargin
         }
+        return bitmap
     }
 
 }
