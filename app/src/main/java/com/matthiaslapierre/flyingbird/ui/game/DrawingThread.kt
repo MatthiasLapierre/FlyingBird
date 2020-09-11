@@ -14,7 +14,7 @@ import com.matthiaslapierre.flyingbird.util.Utils
 
 /**
  * The evolution of any game in computer is carried out within what is commonly called
- * the Game Loop. As part of the implementation of our Flappy Bird game, we implement
+ * the Game Loop. As part of the implementation of our Flying Bird game, we implement
  * it by creating a Thread separated from the UI rendering Thread of the Android application.
  * This separated Thread will be in charge of managing the Game Loop.
  */
@@ -89,9 +89,9 @@ class DrawingThread(
             }
 
             /*
-            You also have noticed that the rendering time is measured before comparing this time
-            to a constant called GAP. This constant allows us to add, if necessary, a delay to
-            avoid that the rendering phase of the Game Loop be too fast.
+            The rendering time is measured before comparing this time to a constant called GAP.
+            This constant allows us to add, if necessary, a delay to avoid that the rendering
+            phase of the Game Loop be too fast.
              */
             val duration = System.currentTimeMillis() - startTime
             val gap = Constants.MS_PER_FRAME - duration
@@ -177,7 +177,7 @@ class DrawingThread(
                     /*
                     We can now complete our Game Loop with game updates about Sprites.
                     We will add the following code to detect if the game should stop because
-                    the player has lost:
+                    the player has lost.
                      */
                     val iterator: MutableListIterator<Sprite> = workSprites.listIterator()
                     while (iterator.hasNext()) {
@@ -191,7 +191,7 @@ class DrawingThread(
                                         scores.storeHighScore(context, points)
                                     }
                                     /*
-                                    the game is over and we will have to display the end screen to
+                                    The game is over and we will have to display the end screen to
                                     the player the next time the Game Loop passes.
                                      */
                                     currentStatus = Sprite.STATUS_GAME_OVER
@@ -219,7 +219,7 @@ class DrawingThread(
     }
 
     /**
-     * The goal of Flappy Bird is to allow the player to progress the bird by tapping on the screen,
+     * The goal of Flying Bird is to allow the player to progress the bird by tapping on the screen,
      * so we must act within the onTouch method of the OnTouchListener interface that our main
      * activity inherits. It is in this method that we will interact with the player when they type
      * on the screen.

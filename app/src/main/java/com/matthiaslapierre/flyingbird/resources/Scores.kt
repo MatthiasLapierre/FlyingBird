@@ -11,8 +11,10 @@ import android.content.SharedPreferences
  */
 class Scores {
 
-    private val PREF_DEFAULT = "com.matthiaslapierre.flyingbird.PREF_DEFAULT"
-    private val HIGH_SCORE = "high_score"
+    companion object {
+        private const val PREF_DEFAULT = "com.matthiaslapierre.flyingbird.PREF_DEFAULT"
+        private const val HIGH_SCORE = "high_score"
+    }
 
     /**
      * Gets the best score achieved.

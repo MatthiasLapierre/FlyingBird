@@ -20,14 +20,29 @@ import com.matthiaslapierre.flyingbird.R
  */
 object Utils {
 
+    /**
+     * Retrieve a dimensional for a particular resource ID for use as a size in raw pixels.
+     */
     fun getDimenInPx(context: Context, @DimenRes id: Int): Float = context.resources.getDimensionPixelSize(id).toFloat()
 
+    /**
+     * Retrieve a dimensional for a particular resource ID.
+     */
     fun getFloat(context: Context, @DimenRes id: Int): Float = context.resources.getDimension(id)
 
+    /**
+     * Returns a drawable object associated with a particular resource ID.
+     */
     fun getDrawable(context: Context, @DrawableRes id: Int): Drawable = ContextCompat.getDrawable(context, id)!!
 
+    /**
+     * Get a random int.
+     */
     fun getRandomInt(maxValue: Int): Int = Random.nextInt(0, maxValue)
 
+    /**
+     * Generates a bitmap showing the score.
+     */
     fun generateScore(
         context: Context,
         points: Int,
@@ -52,8 +67,14 @@ object Utils {
 
 }
 
+/**
+ * [RectF] to [Rect].
+ */
 fun RectF.toRect() = Rect(left.toInt(), top.toInt(), right.toInt(), bottom.toInt())
 
+/**
+ * Parses number to digits.
+ */
 fun Int.toDigits(): Array<Int> {
     val digits = mutableListOf<Int>()
     var i = this

@@ -3,7 +3,6 @@
     <dimen name="ground_height">78dp</dimen>
     <dimen name="pipe_swing">210dp</dimen>
     <dimen name="pipe_gap">225dp</dimen>
-    <dimen name="pipe_dist_max">150dp</dimen>
     <dimen name="pipe_min">52dp</dimen>
     <dimen name="pipe_width">90dp</dimen>
     <dimen name="pipe_interval">270dp</dimen>
@@ -18,9 +17,7 @@
     <dimen name="score_digit_width">48dp</dimen>
     <dimen name="score_digit_height">70dp</dimen>
     <dimen name="score_digit_margin">4dp</dimen>
-    <dimen name="score_small_digit_width">24dp</dimen>
     <dimen name="score_small_digit_height">34dp</dimen>
-    <dimen name="score_small_digit_margin">3dp</dimen>
     <dimen name="ground_width">22dp</dimen>
     <dimen name="ground_margin">60dp</dimen>
     <dimen name="coin_width">45dp</dimen>

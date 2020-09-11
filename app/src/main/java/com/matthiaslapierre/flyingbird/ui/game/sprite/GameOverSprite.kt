@@ -46,7 +46,6 @@ class GameOverSprite(
     private val btnHeight: Float =
         btnWidth * playDrawable.intrinsicHeight / playDrawable.intrinsicWidth
     private val digitHeight: Float = Utils.getDimenInPx(context, R.dimen.score_small_digit_height)
-
     private var isAlive: Boolean = true
 
     override fun onDraw(canvas: Canvas, globalPaint: Paint, status: Int) {
@@ -114,7 +113,7 @@ class GameOverSprite(
         )
         bestScoreBmp.recycle()
 
-        // Next best score icon
+        // New best score icon
         if (newBestScore) {
             val xNewBestScore =
                 (screenWidth / 2f) + (bgFinalScoreWidth / 2f) - (bgFinalScoreWidth * .4f)
@@ -128,6 +127,7 @@ class GameOverSprite(
             newDrawable.draw(canvas)
         }
 
+        // Golden medal
         if (score > Constants.GOLDEN_SCORE) {
             val xGoldMedal =
                 (screenWidth / 2f) - (bgFinalScoreWidth / 2f) + (bgFinalScoreWidth * .11f)

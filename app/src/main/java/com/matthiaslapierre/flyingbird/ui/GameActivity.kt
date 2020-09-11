@@ -78,8 +78,8 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
     }
 
     /**
-     * once the SurfaceHolder object is created,
-     * we start our dedicated Thread that we call DrawingThread.
+     * Once the SurfaceHolder object is created, we start our dedicated Thread that we call
+     * DrawingThread.
      */
     private fun startDrawingThread() {
         stopDrawingThread()

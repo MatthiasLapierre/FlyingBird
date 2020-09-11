@@ -27,12 +27,15 @@ class GroundSprite(
     private val groundWidth: Float = Utils.getDimenInPx(context, R.dimen.ground_width)
     private val groundHeight: Float = Utils.getDimenInPx(context, R.dimen.ground_height)
     private val groupUpHeight: Float = groundHeight - Utils.getDimenInPx(context, R.dimen.ground_margin)
+    private var isAlive: Boolean = true
 
     override fun onDraw(canvas: Canvas, globalPaint: Paint, status: Int) {
+        isAlive = status != Sprite.STATUS_NOT_STARTED
+
         val screenWidth = canvas.width.toFloat()
         val screenHeight = canvas.height.toFloat()
 
-        if (status == Sprite.STATUS_PLAY || status == Sprite.STATUS_NOT_STARTED) {
+        if (status == Sprite.STATUS_PLAY) {
             layerX -= speed
         }
         if (layerX < -groundWidth) {
@@ -60,7 +63,7 @@ class GroundSprite(
         }
     }
 
-    override fun isAlive(): Boolean = true
+    override fun isAlive(): Boolean = isAlive
 
     override fun isHit(sprite: Sprite): Boolean = (sprite is BirdSprite
             && sprite.getRect().bottom >= layerY)

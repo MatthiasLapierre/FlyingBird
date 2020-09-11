@@ -13,7 +13,7 @@ import com.matthiaslapierre.flyingbird.util.Utils
 import com.matthiaslapierre.flyingbird.util.toRect
 
 /**
- * Display the pieces to be collected.
+ * Displays the pieces to be collected.
  */
 class CoinSprite(
     context: Context,
@@ -45,7 +45,7 @@ class CoinSprite(
         }
         if(status == Sprite.STATUS_PLAY) {
             x -= speed
-            // Animate the coin
+            // Animate the coin (flash effect).
             alpha -= alphaSpeed
             if(alpha < minAlpha) {
                 alpha = minAlpha
@@ -63,8 +63,8 @@ class CoinSprite(
     override fun isAlive(): Boolean = isAlive
 
     override fun isHit(sprite: Sprite): Boolean = (isAlive() && sprite is BirdSprite
-            && getRect().intersect(sprite.getRect())).also { isHiten ->
-        if(isHiten) {
+            && getRect().intersect(sprite.getRect())).also { isHitten ->
+        if(isHitten) {
             isWon = true
         }
     }

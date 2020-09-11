@@ -8,7 +8,7 @@ import com.matthiaslapierre.flyingbird.resources.Cache
 import com.matthiaslapierre.flyingbird.util.Utils
 
 /**
- * Display the score.
+ * Displays the score.
  */
 class ScoreSprite(
     private val context: Context,
@@ -17,9 +17,11 @@ class ScoreSprite(
 
     var currentScore: Int = 0
     private val marginTop: Float = Utils.getDimenInPx(context, R.dimen.score_margin)
+    private var isAlive: Boolean = true
 
     override fun onDraw(canvas: Canvas, globalPaint: Paint, status: Int) {
         if (status == Sprite.STATUS_NOT_STARTED) {
+            isAlive = false
             return
         }
         val scoreBmp = Utils.generateScore(
@@ -33,7 +35,7 @@ class ScoreSprite(
         scoreBmp.recycle()
     }
 
-    override fun isAlive(): Boolean = true
+    override fun isAlive(): Boolean = isAlive
 
     override fun isHit(sprite: Sprite): Boolean = false
 
