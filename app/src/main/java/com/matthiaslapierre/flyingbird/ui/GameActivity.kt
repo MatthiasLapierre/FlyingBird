@@ -12,15 +12,15 @@ import com.matthiaslapierre.flyingbird.App
 import com.matthiaslapierre.flyingbird.R
 import com.matthiaslapierre.flyingbird.resources.Cache
 import com.matthiaslapierre.flyingbird.resources.Scores
-import com.matthiaslapierre.flyingbird.ui.game.DrawingThread
 import com.matthiaslapierre.flyingbird.resources.SoundEngine
+import com.matthiaslapierre.flyingbird.ui.game.GameProcessor
 import kotlinx.android.synthetic.main.activity_game.*
 
 /**
  * Main Activity.
  */
 class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchListener,
-    DrawingThread.GameInterface {
+    GameProcessor.GameInterface {
 
     companion object {
         private const val TAG = "GameActivity"
@@ -29,14 +29,14 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
     private lateinit var cache: Cache
     private lateinit var soundEngine: SoundEngine
     private lateinit var scores: Scores
-
+    private lateinit var gameProcessor: GameProcessor
     private lateinit var holder: SurfaceHolder
     private val globalPaint: Paint by lazy {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint
     }
     private var surfaceCreated: Boolean = false
-    private var drawingThread: DrawingThread? = null
+    private var drawingThread: Thread? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,17 +54,40 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
         surfaceView.setOnTouchListener(this)
         holder.addCallback(this)
         holder.setFormat(PixelFormat.TRANSLUCENT)
+
+        // Initialize the GameProcessor.
+        gameProcessor = GameProcessor(
+            applicationContext,
+            holder,
+            globalPaint,
+            cache,
+            scores,
+            this@GameActivity
+        )
     }
 
-    override fun onTouch(view: View?, event: MotionEvent?): Boolean {
-        if (event?.action == MotionEvent.ACTION_DOWN) {
-            drawingThread?.onTap(event.x, event.y)
-        }
-        return false
+    override fun onResume() {
+        super.onResume()
+        // Resume the game.
+        gameProcessor.resume()
+    }
+
+    override fun onPause() {
+        // Pause the game.
+        gameProcessor.pause()
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        // Unload resources.
+        soundEngine.release()
+        gameProcessor.release()
+        super.onDestroy()
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
         surfaceCreated = true
+        // After the surface is created, we start the game loop.
         startDrawingThread()
     }
 
@@ -73,8 +96,16 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
+        // Stop the game loop after destroying the surface.
         surfaceCreated = false
         stopDrawingThread()
+    }
+
+    override fun onTouch(view: View?, event: MotionEvent?): Boolean {
+        if (event?.action == MotionEvent.ACTION_DOWN) {
+            gameProcessor.onTap(event.x, event.y)
+        }
+        return false
     }
 
     /**
@@ -83,14 +114,9 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
      */
     private fun startDrawingThread() {
         stopDrawingThread()
-        drawingThread = DrawingThread(
-            applicationContext,
-            holder,
-            globalPaint,
-            cache,
-            scores,
-            this@GameActivity
-        )
+        drawingThread = Thread(Runnable {
+            gameProcessor.execute()
+        })
         drawingThread!!.start()
     }
 
@@ -101,13 +127,11 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
      */
     private fun stopDrawingThread() {
         drawingThread?.interrupt()
-
         try {
             drawingThread?.join()
         } catch (e: InterruptedException) {
             Log.e(TAG, "Failed to interrupt the drawing thread")
         }
-        drawingThread?.clean()
         drawingThread = null
     }
 

@@ -3,6 +3,9 @@ package com.matthiaslapierre.flyingbird
 import com.matthiaslapierre.flyingbird.resources.Cache
 import com.matthiaslapierre.flyingbird.resources.Scores
 import com.matthiaslapierre.flyingbird.resources.SoundEngine
+import com.matthiaslapierre.flyingbird.resources.impl.CacheImpl
+import com.matthiaslapierre.flyingbird.resources.impl.ScoresImpl
+import com.matthiaslapierre.flyingbird.resources.impl.SoundEngineImpl
 
 /**
  * To solve the issue of reusing objects, you can create your own dependencies container class
@@ -12,7 +15,7 @@ import com.matthiaslapierre.flyingbird.resources.SoundEngine
  * @see https://developer.android.com/training/dependency-injection/manual
  */
 class AppContainer {
-    val cache = Cache()
-    val soundEngine = SoundEngine()
-    val scores = Scores()
+    val cache: Cache = CacheImpl()
+    val soundEngine: SoundEngine = SoundEngineImpl()
+    val scores: Scores = ScoresImpl()
 }

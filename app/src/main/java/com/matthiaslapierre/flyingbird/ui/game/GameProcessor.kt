@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.view.SurfaceHolder
+import androidx.annotation.WorkerThread
 import com.matthiaslapierre.flyingbird.Constants
 import com.matthiaslapierre.flyingbird.R
 import com.matthiaslapierre.flyingbird.resources.Cache
@@ -13,25 +14,23 @@ import com.matthiaslapierre.flyingbird.ui.game.sprite.*
 import com.matthiaslapierre.flyingbird.util.Utils
 
 /**
- * The evolution of any game in computer is carried out within what is commonly called
- * the Game Loop. As part of the implementation of our Flying Bird game, we implement
- * it by creating a Thread separated from the UI rendering Thread of the Android application.
- * This separated Thread will be in charge of managing the Game Loop.
+ * Handles the game loop.
  */
-class DrawingThread(
+class GameProcessor(
     private val context: Context,
     private val holder: SurfaceHolder,
     private val globalPaint: Paint,
     private val cache: Cache,
     private val scores: Scores,
     private var gameInterface: GameInterface?
-): Thread(), SplashSprite.SplashInterface, GameOverSprite.GameOverInterface {
+): SplashSprite.SplashInterface, GameOverSprite.GameOverInterface {
 
     companion object {
         private const val MIN_PIPES = 60
     }
 
     private var currentStatus: Int = Sprite.STATUS_NOT_STARTED
+    private var isPaused: Boolean = false
     private var points: Int = 0
     private var workSprites: MutableList<Sprite> = mutableListOf()
     private var birdSprite: BirdSprite? = null
@@ -46,17 +45,18 @@ class DrawingThread(
     private val pipeInterval = Utils.getDimenInPx(context, R.dimen.pipe_interval)
     private var newBestScore: Boolean = false
 
-    override fun run() {
-        super.run()
-
+    @WorkerThread
+    fun execute() {
         /*
-        In our DrawingThread, we loop as long as the Thread is active.
+        In our GameProcessor, we loop as long as the Thread is active.
         First, we take care of the rendering of our game. To do this, we obtain a reference to the
         Canvas of our SurfaceHolder object by calling its lockCanvas method.
         We then empty the content of this Canvas before iterating on all the elements of our
         game that we want to return to the screen. These elements being our Sprites.
          */
-        while (!interrupted()) {
+        while (!Thread.interrupted()) {
+            if(isPaused) continue
+
             val startTime = System.currentTimeMillis()
             val canvas = holder.lockCanvas()
             val screenWidth = canvas.width.toFloat()
@@ -97,7 +97,7 @@ class DrawingThread(
             val gap = Constants.MS_PER_FRAME - duration
             if(gap > 0) {
                 try {
-                    sleep(gap)
+                    Thread.sleep(gap)
                 } catch (e: Exception) {
                     break
                 }
@@ -107,7 +107,7 @@ class DrawingThread(
                 Sprite.STATUS_NOT_STARTED -> {
                     // Show the home screen
                     if(splashSprite == null || !splashSprite!!.isAlive()) {
-                        splashSprite = SplashSprite(context, cache, this@DrawingThread)
+                        splashSprite = SplashSprite(context, cache, this@GameProcessor)
                         workSprites.add(splashSprite!!)
                     }
                 }
@@ -120,7 +120,7 @@ class DrawingThread(
                             points,
                             newBestScore,
                             scores.highScore(context),
-                            this@DrawingThread
+                            this@GameProcessor
                         )
                         workSprites.add(gameOverSprite!!)
                     }
@@ -210,6 +210,20 @@ class DrawingThread(
         }
     }
 
+    /**
+     * Pauses the game (pauses the game loop).
+     */
+    fun pause() {
+        isPaused = true
+    }
+
+    /**
+     * Resumes the game (resumes the game loop).
+     */
+    fun resume() {
+        isPaused = false
+    }
+
     override fun onPlayBtnTapped() {
         startGame()
     }
@@ -258,7 +272,7 @@ class DrawingThread(
     /**
      * Prevents memory leakage (some objects were not releasing memory).
      */
-    fun clean() {
+    fun release() {
         gameInterface = null
     }
 
