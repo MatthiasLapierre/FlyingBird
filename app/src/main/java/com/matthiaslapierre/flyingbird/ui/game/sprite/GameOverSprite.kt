@@ -6,11 +6,11 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
+import androidx.core.graphics.toRect
 import com.matthiaslapierre.flyingbird.Constants
 import com.matthiaslapierre.flyingbird.R
 import com.matthiaslapierre.flyingbird.resources.Cache
 import com.matthiaslapierre.flyingbird.util.Utils
-import com.matthiaslapierre.flyingbird.util.toRect
 
 /**
  * Game Over screen.

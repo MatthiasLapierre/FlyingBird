@@ -2,7 +2,6 @@ package com.matthiaslapierre.flyingbird.util
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import androidx.annotation.DimenRes
@@ -12,6 +11,7 @@ import com.matthiaslapierre.flyingbird.resources.Cache
 import kotlin.random.Random
 
 import android.graphics.Canvas
+import androidx.core.graphics.toRect
 import com.matthiaslapierre.flyingbird.R
 
 
@@ -66,11 +66,6 @@ object Utils {
     }
 
 }
-
-/**
- * [RectF] to [Rect].
- */
-fun RectF.toRect() = Rect(left.toInt(), top.toInt(), right.toInt(), bottom.toInt())
 
 /**
  * Parses number to digits.

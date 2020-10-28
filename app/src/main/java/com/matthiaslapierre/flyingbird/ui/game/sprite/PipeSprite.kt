@@ -3,11 +3,11 @@ package com.matthiaslapierre.flyingbird.ui.game.sprite
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import androidx.core.graphics.toRect
 import com.matthiaslapierre.flyingbird.Constants.UNDEFINED
 import com.matthiaslapierre.flyingbird.R
 import com.matthiaslapierre.flyingbird.resources.Cache
 import com.matthiaslapierre.flyingbird.util.Utils
-import com.matthiaslapierre.flyingbird.util.toRect
 import kotlin.math.max
 import kotlin.math.min
 
