@@ -11,7 +11,7 @@ The game was released in May 2013 but received a sudden rise in popularity in ea
 Flappy Bird was removed from both the App Store and Google Play by its creator on February 10, 2014. He claims that he felt guilt over what he considered to be its addictive nature and overuse. The game's popularity and sudden removal caused phones with it pre-installed to be put up for sale for high prices over the Internet. Games similar to Flappy Bird became popular on the iTunes App Store in the wake of its removal, and both Apple and Google have removed games from their app stores for being too similar to the original. The game has also been distributed through unofficial channels on multiple platforms.
 
 ## How to play
-1. [Download](https://github.com/MatthiasLapierre/FlyingBird/blob/master/resources/apk/flyingbird.apk) and install the game
+1. [Download](https://github.com/MatthiasLapierre/FlyingBird/releases/download/1.0/flyingbird.apk) and install the game
 2. Start the game. Tap the arrow to start.
 3. Stay in the middle of screen until the first set of pipes appears. Measure your tap heights to go between the two pipes. The faster you tap, the higher you go. Each tap represents a wing flap and higher flight. Once you stop, you drop towards the ground.
 4. Stay in the middle of the pipes. This is the main objective of the game. If you hit a pipe or the ground, the game ends.
